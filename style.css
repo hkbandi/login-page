@@ -79,7 +79,7 @@ h1 {
   margin-bottom: 1.75rem;
 }
 
-/* Error banner */
+/* Status banner (error / success) */
 .error-message {
   display: none;
   background: var(--danger-bg);
@@ -93,6 +93,12 @@ h1 {
 
 .error-message.visible {
   display: block;
+}
+
+.error-message.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #15803d;
 }
 
 /* Form groups */
