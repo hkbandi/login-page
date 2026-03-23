@@ -28,7 +28,17 @@ function clearErrors() {
   setFieldError(emailInput, emailError, '');
   setFieldError(passwordInput, passwordError, '');
   errorBanner.textContent = '';
-  errorBanner.classList.remove('visible');
+  errorBanner.classList.remove('visible', 'success');
+}
+
+function showBanner(type, message) {
+  errorBanner.textContent = message;
+  errorBanner.classList.add('visible');
+  if (type === 'success') {
+    errorBanner.classList.add('success');
+  } else {
+    errorBanner.classList.remove('success');
+  }
 }
 
 function validateForm() {
@@ -116,17 +126,17 @@ form.addEventListener('submit', async (e) => {
   btnSpinner.classList.remove('hidden');
 
   try {
-    // Simulated API call — replace with your real endpoint
     await fakeLogin(emailInput.value.trim(), passwordInput.value);
 
-    // On success, redirect or update UI
-    btnText.textContent = 'Success!';
+    // ── Login successful ──
     btnSpinner.classList.add('hidden');
-    // window.location.href = '/dashboard';
+    btnText.textContent = 'Sign in';
+    submitBtn.disabled = false;
+    showBanner('success', '✅ Login successful! Welcome back.');
 
   } catch (err) {
-    errorBanner.textContent = err.message || 'Invalid email or password. Please try again.';
-    errorBanner.classList.add('visible');
+    // ── Login failed ──
+    showBanner('error', '❌ ' + (err.message || 'Login failed. Please try again.'));
     btnText.textContent = 'Sign in';
     btnSpinner.classList.add('hidden');
     submitBtn.disabled = false;
@@ -135,16 +145,18 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// ── Simulated auth (replace with your real API call) ───────────────────────
+// ── Auth (checks against demo credentials) ─────────────────────────────────
+
+const DEMO_EMAIL    = 'demo@demo.com';
+const DEMO_PASSWORD = 'demo123';
 
 function fakeLogin(email, password) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      // Demo: succeed for any well-formed input
-      if (email && password.length >= 6) {
+      if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
         resolve({ token: 'demo-token' });
       } else {
-        reject(new Error('Invalid credentials.'));
+        reject(new Error('Login failed. Invalid email or password.'));
       }
     }, 1200);
   });
